@@ -83,7 +83,7 @@ export default class SceneManager {
     if (destroyScene) {
       this.sceneInstances.delete(this.currentScene.label);
 
-      this.currentScene.destroy();
+      this.currentScene.destroy({ children: true });
     } else {
       this.app.stage.removeChild(this.currentScene);
     }

@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import config from "../config";
-import { Tween } from "@tweenjs/tween.js";
+import * as TWEEN from "@tweenjs/tween.js";
 import { between } from "../utils/math";
 import Card from "../prefabs/Card";
 import BaseScene from "./BaseScene";
@@ -15,6 +15,7 @@ export default class CardsDemo extends BaseScene {
   private cardSize!: { width: number; height: number };
   private flipButton!: Button;
   private cardsOpen = false;
+  private tweens!: TWEEN.Tween<any>[];
 
   load() {
     this.addBackground();
@@ -22,6 +23,7 @@ export default class CardsDemo extends BaseScene {
 
   async start() {
     super.start();
+    this.tweens = [];
     this.addCardsDeck();
     this.addFlipButton();
     this.adjustCardsDeckContainerPosition();
@@ -95,20 +97,23 @@ export default class CardsDemo extends BaseScene {
     delay: number
   ): void {
     if (card.destroyed) return;
-    new Tween(card)
-      .onStart(() => card.flipCardAnimation())
-      .to(
-        {
-          y,
-          rotation,
-        },
-        2000
-      )
-      .onComplete(() => {
-        this.flipButton.setEnable(isFlipButtonEnable);
-      })
-      .delay(delay)
-      .start();
+    this.tweens.push(
+      new TWEEN.Tween(card)
+        .onStart(() => card.flipCardAnimation())
+        .to(
+          {
+            y,
+            rotation,
+          },
+          2000
+        )
+        .easing(TWEEN.Easing.Bounce.Out)
+        .onComplete(() => {
+          this.flipButton.setEnable(isFlipButtonEnable);
+        })
+        .delay(delay)
+        .start()
+    );
   }
 
   /**
@@ -171,5 +176,11 @@ export default class CardsDemo extends BaseScene {
       window.innerWidth / 2,
       window.innerHeight * 0.9
     );
+  }
+
+  destroy(options?: PIXI.DestroyOptions): void {
+    super.destroy(options);
+    this.tweens.forEach((tween) => TWEEN.remove(tween));
+    this.children.forEach((child) => child.destroy(options));
   }
 }
