@@ -1,17 +1,11 @@
 import { Tween } from "@tweenjs/tween.js";
 import * as PIXI from "pixi.js";
-import { GameState } from "../state/game-state";
 
 export default class Card extends PIXI.Container {
   private backSprite!: PIXI.Sprite;
   private frontSprite!: PIXI.Sprite;
-  constructor(
-    x: number,
-    y: number,
-    public symbol: number,
-    public isOpen?: boolean,
-    public isDeck?: boolean
-  ) {
+  public isOpen = false;
+  constructor(x: number, y: number, public symbol: number) {
     super({ x, y });
     this.init();
   }
@@ -40,45 +34,11 @@ export default class Card extends PIXI.Container {
       const flipBack = new Tween(this.backSprite.scale).to({ x: 0 }, 500);
       const flipFront = new Tween(this.frontSprite.scale).to({ x: 1 }, 500);
       flipBack.chain(flipFront).start();
-      this.isOpen = true;
     } else {
       const flipFront = new Tween(this.frontSprite.scale).to({ x: 0 }, 500);
       const flipBack = new Tween(this.backSprite.scale).to({ x: 1 }, 500);
       flipFront.chain(flipBack).start();
-      this.isOpen = false;
     }
-  }
-
-  flyToMainCardAnimation(): void {
-    this.parent.setChildIndex(this, this.parent.children.length - 1);
-    new Tween(this)
-      .to(
-        {
-          x: GameState.mainCardPosition.x,
-          y: GameState.mainCardPosition.y,
-          rotation: Math.PI,
-        },
-        500
-      )
-      .onComplete(() => {
-        if (this.isDeck) {
-          this.isDeck = false;
-        }
-        GameState.mainCardSymbol = this.symbol;
-      })
-      .start();
-  }
-
-  onPointerUp(): void {
-    if (
-      this.isOpen &&
-      (this.symbol === GameState.mainCardSymbol - 1 ||
-        this.symbol === GameState.mainCardSymbol + 1)
-    ) {
-      this.flyToMainCardAnimation();
-    } else if (this.isDeck) {
-      this.flipCardAnimation();
-      this.flyToMainCardAnimation();
-    }
+    this.isOpen = !this.isOpen;
   }
 }

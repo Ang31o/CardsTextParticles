@@ -3,8 +3,11 @@ import Scene from "../core/Scene";
 import Button from "../prefabs/Button";
 import EventService from "../core/EventService";
 import { Events } from "../enums/events";
-import { GameState } from "../state/game-state";
 
+/**
+ * Main menu scene where everything starts
+ * From here player can go to different game sections Cards Demo, Text Demo or Particles Demo.
+ */
 export default class Menu extends Scene {
   label = "Menu";
   private menuLabel!: PIXI.Text;
@@ -14,10 +17,8 @@ export default class Menu extends Scene {
   private particlesDemoButton!: Button;
 
   async start() {
-    GameState.init();
     this.addMenuLabel();
     this.addButtons();
-    // window.g = this;
   }
 
   addMenuLabel(): void {
@@ -78,9 +79,5 @@ export default class Menu extends Scene {
   onResize(width: number, height: number): void {
     this.menuLabel.x = width / 2;
     this.buttonsContainer.position.set(width / 2, height / 2);
-  }
-
-  destroy(options?: PIXI.DestroyOptions): void {
-    super.destroy(options);
   }
 }

@@ -5,6 +5,11 @@ import Button from "../prefabs/Button";
 import EventService from "../core/EventService";
 import { Events } from "../enums/events";
 
+/**
+ * This is the BaseScene which all other game scene extends,
+ * Currently it has common things that every scene would need like
+ * FPSMeter and ReturnButton to return to the Menu scene
+ */
 export default class BaseScene extends Scene {
   label = "BaseScene";
   private returnButton!: Button;
@@ -13,7 +18,6 @@ export default class BaseScene extends Scene {
   async start() {
     this.addReturnButton();
     this.addFPSMeter();
-    // window.g = this;
   }
 
   addFPSMeter(): void {
@@ -45,9 +49,5 @@ export default class BaseScene extends Scene {
   update(delta: number): void {
     if (super.update) super.update(delta);
     this.stats.update();
-  }
-
-  destroy(options?: PIXI.DestroyOptions): void {
-    super.destroy(options);
   }
 }

@@ -2,10 +2,13 @@ import { Config } from "./interfaces/config.interface";
 
 export default {
   cards: {
-    amount: 3,
+    amount: 144,
   },
-  mainCard: {
-    x: 300,
-    y: 600,
+  text: {
+    emoticonProbability: 0.4,
+    priceProbability: 0.3,
+  },
+  particles: {
+    amount: 5,
   },
 } as Config;

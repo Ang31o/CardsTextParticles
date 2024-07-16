@@ -4,13 +4,11 @@ export default class TextImageMixer extends PIXI.Container {
   private parts!: string[];
 
   constructor(
-    x: number,
-    y: number,
     private fontSize: number,
     private fontWeight: PIXI.TextStyleFontWeight,
     private imageTextString: string
   ) {
-    super({ x, y });
+    super();
     this.init();
   }
 
@@ -20,21 +18,11 @@ export default class TextImageMixer extends PIXI.Container {
   }
 
   parseImageText(): void {
-    // const imageRegex = /<([^>]*)>/g;
-    // const textRegex = /<[^>]*>/;
-    // const imageKeys = this.imageTextString
-    //   .match(imageRegex)
-    //   ?.map((tag) => tag.slice(1, -1));
-    // const textStrings = this.imageTextString.split(textRegex);
-    // console.log(imageKeys, textStrings);
-
     const regex = /(<[^>]*>)/g;
 
     this.parts = this.imageTextString
       .split(regex)
       .filter((part) => part !== "");
-
-    // console.log(this.parts);
   }
 
   addTextImage(): void {

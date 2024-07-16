@@ -3,6 +3,7 @@ import BaseScene from "./BaseScene";
 import { centerObjects } from "../utils/misc";
 import { between } from "../utils/math";
 import FireSpark from "../core/FireSpark";
+import config from "../config";
 
 export default class ParticlesDemo extends BaseScene {
   label = "ParticlesDemo";
@@ -17,6 +18,9 @@ export default class ParticlesDemo extends BaseScene {
     this.addParticles();
   }
 
+  /**
+   * Adds fire animation as a fire sprite with DisplacementFilter which is animated in update() method
+   */
   addFire(): void {
     this.fireContainer = new PIXI.Container();
     this.fire = new PIXI.Sprite(PIXI.Assets.get("fire"));
@@ -38,11 +42,14 @@ export default class ParticlesDemo extends BaseScene {
     this.addChild(this.fireContainer);
   }
 
+  /**
+   * Adds fire sparks particles which fly's upward
+   */
   addParticles(): void {
     this.fireSparks = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < config.particles.amount; i++) {
       const fireSpark = new FireSpark(
-        between(2, 5),
+        between(2, 6),
         between(-150, -220),
         this.fire.width
       );
@@ -65,10 +72,5 @@ export default class ParticlesDemo extends BaseScene {
     for (let i = 0; i < this.fireSparks.length; i++) {
       this.fireSparks[i].update();
     }
-  }
-
-  destroy(options?: PIXI.DestroyOptions): void {
-    super.destroy(options);
-    this.children.forEach((child) => child.destroy(options));
   }
 }

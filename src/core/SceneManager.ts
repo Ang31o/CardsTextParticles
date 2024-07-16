@@ -21,16 +21,12 @@ export default class SceneManager {
     this.app = new PIXI.Application();
     await this.app.init({
       canvas: document.querySelector("#app") as HTMLCanvasElement,
-      autoDensity: true,
+      width: window.innerWidth, // Initial width
+      height: window.innerHeight, // Initial height
       resizeTo: window,
       eventMode: "static",
-      powerPreference: "high-performance",
-      background: "transparent",
       useBackBuffer: true,
     });
-    // window.m = this;
-    // window.PIXI = PIXI;
-    // window.Tween = TWEEN;
 
     // @ts-expect-error Set PIXI app to global window object for the PIXI Inspector
     window.__PIXI_APP__ = this.app;
@@ -87,7 +83,7 @@ export default class SceneManager {
     if (destroyScene) {
       this.sceneInstances.delete(this.currentScene.label);
 
-      this.currentScene.destroy({ children: true });
+      this.currentScene.destroy();
     } else {
       this.app.stage.removeChild(this.currentScene);
     }

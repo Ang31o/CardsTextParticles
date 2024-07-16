@@ -45,6 +45,11 @@ export default class Button extends PIXI.Container {
     }
   }
 
+  setEnable(state: boolean): void {
+    this.interactive = state;
+    this.alpha = state ? 1 : 0.5;
+  }
+
   onPointerUp(): void {
     if (this.onRelease) {
       this.onReleaseScope
